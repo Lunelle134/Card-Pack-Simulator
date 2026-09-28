@@ -1,252 +1,155 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pack Pop — Card Pack Simulator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pack Pop</title>
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;700;800;900&display=swap");
-
-    :root {
-      --cream: #fff6dc;
-      --gold: #ffd161;
-      --purple: #593481;
-      --pink: #e75791;
-      --dark: #1a1024;
-      --ink: #30203a;
-    }
-
     * {
       box-sizing: border-box;
     }
 
-    html, body {
-      margin: 0;
-      min-height: 100%;
-    }
-
     body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
       color: white;
-      overflow-x: hidden;
-      font-family: Nunito, Arial, sans-serif;
-      background: #1b1020;
+      font-family: Arial, sans-serif;
+      background: #160d21;
     }
 
     button {
       font: inherit;
     }
 
-    button:focus-visible {
-      outline: 4px solid white;
-      outline-offset: 4px;
+    .shop,
+    .screen {
+      min-height: 100vh;
     }
-
-    .app {
-      min-height: 100svh;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Top bar */
-
-    .topbar {
-      position: fixed;
-      z-index: 20;
-      top: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px clamp(16px, 4vw, 54px);
-      pointer-events: none;
-    }
-
-    .logo,
-    .top-actions {
-      pointer-events: auto;
-    }
-
-    .logo {
-      font-family: Fredoka, Arial, sans-serif;
-      font-size: clamp(20px, 3vw, 30px);
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-shadow: 0 3px 0 rgba(46, 17, 59, 0.65);
-    }
-
-    .logo span {
-      color: var(--gold);
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .coins,
-    .collection-button {
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 999px;
-      padding: 8px 13px;
-      color: white;
-      background: rgba(35, 18, 48, 0.65);
-      box-shadow: 0 4px 13px rgba(0, 0, 0, 0.2);
-    }
-
-    .coins {
-      font-weight: 900;
-    }
-
-    .coins span {
-      color: var(--gold);
-      margin-right: 4px;
-    }
-
-    .collection-button {
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    .collection-number {
-      display: inline-grid;
-      min-width: 22px;
-      height: 22px;
-      margin-left: 5px;
-      place-items: center;
-      border-radius: 50%;
-      color: #44275c;
-      background: var(--gold);
-    }
-
-    /* Shop */
 
     .shop {
       position: relative;
       display: grid;
-      min-height: 100svh;
-      padding: 120px 20px 70px;
+      padding: 90px 20px;
       place-items: center;
-      isolation: isolate;
       overflow: hidden;
       background:
-        radial-gradient(ellipse at 50% 38%, rgba(255, 215, 124, 0.62), transparent 32%),
-        linear-gradient(#74452e 0%, #bc7041 42%, #633b2c 43%, #38242b 100%);
+        radial-gradient(circle at 50% 34%, #ffd48655, transparent 30%),
+        linear-gradient(#70452e 0 43%, #3a232d 43% 100%);
     }
 
     .shop::before {
       content: "";
       position: absolute;
-      z-index: -3;
       inset: 0;
-      opacity: 0.42;
-      background-image:
-        repeating-linear-gradient(90deg, rgba(69, 37, 25, 0.5) 0 7px, transparent 7px 82px),
-        repeating-linear-gradient(0deg, rgba(54, 26, 32, 0.35) 0 5px, transparent 5px 70px);
+      opacity: 0.35;
+      background:
+        repeating-linear-gradient(90deg, #47271988 0 7px, transparent 7px 80px),
+        repeating-linear-gradient(0deg, #3c202766 0 5px, transparent 5px 68px);
     }
 
-    .shop::after {
-      content: "";
+    .title {
       position: absolute;
-      z-index: -1;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 37%;
-      background: linear-gradient(#623929 0 12%, #39242b 12%);
-      box-shadow: inset 0 11px 15px rgba(28, 10, 16, 0.26);
-    }
-
-    .scene-title {
-      position: absolute;
-      z-index: 3;
-      top: clamp(90px, 12vh, 130px);
+      z-index: 2;
+      top: 100px;
       text-align: center;
-      text-shadow: 0 3px 0 #613232, 0 6px 18px rgba(20, 7, 17, 0.5);
+      text-shadow: 0 4px 10px #301425;
     }
 
-    .scene-title p {
+    .title p {
       margin: 0;
-      color: #ffdd73;
+      color: #ffdc74;
       font-size: 12px;
-      font-weight: 900;
+      font-weight: bold;
       letter-spacing: 3px;
     }
 
-    .scene-title h1 {
-      margin: 4px 0;
-      font-family: Fredoka, Arial, sans-serif;
-      font-size: clamp(36px, 6vw, 68px);
-      line-height: 1;
+    .title h1 {
+      margin: 7px 0;
+      font-size: clamp(34px, 6vw, 66px);
     }
 
-    .scene-title span {
-      font-weight: 800;
-    }
-
-    .shelf {
-      position: absolute;
-      z-index: -2;
-      top: 20%;
-      display: flex;
-      width: 27%;
-      height: 45%;
-      align-items: center;
-      justify-content: space-around;
-      border-top: 12px solid #48271e;
-      border-bottom: 15px solid #39201b;
-      background: repeating-linear-gradient(to bottom, transparent 0 29%, #47261c 30% 35%);
-      box-shadow: 0 13px 0 #29171f, 0 0 0 7px #7b462a;
-    }
-
-    .shelf-left {
-      left: -3%;
-    }
-
-    .shelf-right {
-      right: -3%;
-    }
-
-    .shelf span {
-      width: clamp(17px, 3vw, 40px);
-      height: clamp(46px, 8vw, 92px);
-      border: 3px solid rgba(255, 229, 145, 0.6);
-      border-radius: 4px 4px 12px 12px;
-      background: linear-gradient(90deg, #62d3da, #bb58b6);
-      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .shelf span:nth-child(2n) {
-      background: linear-gradient(90deg, #ffd051, #ee6b61);
+    .title span {
+      font-weight: bold;
     }
 
     .counter {
       position: absolute;
-      z-index: 0;
-      bottom: 15%;
+      bottom: 13%;
       left: 50%;
-      width: min(860px, 92vw);
+      width: min(850px, 90vw);
       height: 120px;
       transform: translateX(-50%);
-      border-radius: 38px 38px 0 0;
-      background: linear-gradient(160deg, #e29c56, #824730 62%);
-      box-shadow: 0 -12px 0 rgba(255, 204, 132, 0.26), 0 18px 25px rgba(22, 10, 17, 0.38);
+      border-radius: 40px 40px 0 0;
+      background: linear-gradient(160deg, #e3a05c, #7a412d);
+      box-shadow: 0 -12px 0 #ffd48a55;
     }
 
     .packs {
-      z-index: 4;
+      z-index: 2;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: clamp(12px, 3vw, 42px);
-      margin-top: 100px;
+      gap: clamp(12px, 3vw, 40px);
+      margin-top: 130px;
     }
 
     .pack {
       position: relative;
-      width: clamp(125px, 18vw, 210px);
+      width: clamp(120px, 18vw, 205px);
       aspect-ratio: 0.66;
       overflow: hidden;
-      border: 6px solid
+      border: 6px solid #ffe39e;
+      border-radius: 12px 12px 20px 20px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 15px 22px #1d101999;
+      transition: transform 0.2s, filter 0.2s;
+    }
+
+    .pack:hover {
+      z-index: 3;
+      filter: brightness(1.16);
+      transform: translateY(-22px) scale(1.08);
+    }
+
+    .aqua {
+      background: linear-gradient(145deg, #00c2c9, #3262ca 52%, #5a2b94);
+    }
+
+    .sunset {
+      background: linear-gradient(145deg, #f9a52c, #df4e68 52%, #73338e);
+    }
+
+    .moss {
+      background: linear-gradient(145deg, #91cd55, #219877 52%, #28649d);
+    }
+
+    .pack::before,
+    .pack::after {
+      content: "";
+      position: absolute;
+      left: -10%;
+      width: 120%;
+      height: 17px;
+      border-top: 2px solid #ffffff99;
+      border-bottom: 2px solid #ffffff77;
+      background: #44206677;
+    }
+
+    .pack::before {
+      top: 10px;
+    }
+
+    .pack::after {
+      bottom: 10px;
+    }
+
+    .orb {
+      position: absolute;
+      top: 19%;
+      left: 50%;
+      display: grid;
+      width: 50%;
+      aspect-ratio:
